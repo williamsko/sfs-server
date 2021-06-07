@@ -87,7 +87,7 @@ class AgentResource(ModelResource):
         data = self.deserialize(request, request.body)
         key = data['key']
         try:
-            existing_key = Key.objects.get(key=key)
+            existing_key = Key.objects.get(content=key)
             if existing_key.status:
                 return self.create_response(request, {'response_text': 'key already used', 'response_code': '100'}, HttpForbidden)
 
