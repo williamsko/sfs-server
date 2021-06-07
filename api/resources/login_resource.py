@@ -1,11 +1,11 @@
 from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 from django.contrib.auth.models import User
 from tastypie.serializers import Serializer
-from entreprise.models import Agent, Entreprise
+from entreprise.models import Agent, Entreprise, Key
 from django.conf.urls import url
 from tastypie.utils import trailing_slash
 from tastypie.fields import ForeignKey
-from tastypie.http import HttpUnauthorized, HttpForbidden
+from tastypie.http import HttpUnauthorized, HttpForbidden, HttpAccepted
 
 
 class UserResource(ModelResource):
@@ -46,6 +46,9 @@ class AgentResource(ModelResource):
             url(r"^(?P<resource_name>%s)/login%s$" %
                 (self._meta.resource_name, trailing_slash()),
                 self.wrap_view('login'), name="api_login"),
+            url(r"^(?P<resource_name>%s)/key/activate%s$" %
+                (self._meta.resource_name, trailing_slash()),
+                self.wrap_view('activate_key'), name="api_key_activation"),
 
         ]
 
@@ -77,3 +80,20 @@ class AgentResource(ModelResource):
                 return self.create_response(request, {'response_text': 'agent is not active', 'response_code': '100'}, HttpUnauthorized)
         except User.DoesNotExist:
             return self.create_response(request, {'response_text': 'unknwonw user', 'response_code': '100'}, HttpForbidden)
+
+    
+    def activate_key(self, request, **kwargs):
+        self.method_check(request, allowed=['post'])
+        data = self.deserialize(request, request.body)
+        key = data['key']
+        try:
+            existing_key = Key.objects.get(key=key)
+            if existing_key.status:
+                return self.create_response(request, {'response_text': 'key already used', 'response_code': '100'}, HttpForbidden)
+
+            existing_key.status = True
+            existing_key.save()
+            return self.create_response(request, {'response_text': 'OK'}, HttpAccepted)
+
+        except Key.DoesNotExist:
+            return self.create_response(request, {'response_text': 'unknown key', 'response_code': '100'}, HttpForbidden)
