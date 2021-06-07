@@ -1,5 +1,5 @@
 from django.contrib import admin
-from entreprise.models import Entreprise, Agent, SMTP
+from entreprise.models import Entreprise, Agent, SMTP, Key
 # Register your models here.
 
 
@@ -25,3 +25,11 @@ class SMTPAdmin(admin.ModelAdmin):
 
 
 admin.site.register(SMTP, SMTPAdmin)
+
+
+class KeyAdmin(admin.ModelAdmin):
+    list_display = ('content', 'entreprise', 'status')
+    search_fields = ['entreprise', 'status']
+
+
+admin.site.register(Key, KeyAdmin)

@@ -86,3 +86,27 @@ class SMTP(models.Model):
         verbose_name = _('Param. SMTP')
         verbose_name_plural = _('Params. SMTP')
         app_label = 'entreprise'
+
+
+class Key(models.Model):
+
+    content = models.CharField(
+        unique=True,
+        max_length=32,
+        null=False,
+        blank=False,
+        default=rstr.digits(10),
+    )
+    entreprise = models.ForeignKey(
+        Entreprise, on_delete=models.DO_NOTHING, null=True, blank=True)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    status = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.content}'
+
+    class Meta:
+        verbose_name = _("Clé")
+        verbose_name_plural = _("Clés")
+        app_label = 'entreprise'
