@@ -1,7 +1,7 @@
 from tastypie.resources import ModelResource, ALL, ALL_WITH_RELATIONS
 from django.contrib.auth.models import User
 from tastypie.serializers import Serializer
-from entreprise.models import Agent, Entreprise, Key
+from entreprise.models import Agent, Entreprise, Key, AdminPassword
 from django.conf.urls import url
 from tastypie.utils import trailing_slash
 from tastypie.fields import ForeignKey
@@ -81,7 +81,6 @@ class AgentResource(ModelResource):
         except User.DoesNotExist:
             return self.create_response(request, {'response_text': 'unknwonw user', 'response_code': '100'}, HttpForbidden)
 
-    
     def activate_key(self, request, **kwargs):
         self.method_check(request, allowed=['post'])
         data = self.deserialize(request, request.body)
@@ -93,7 +92,12 @@ class AgentResource(ModelResource):
 
             existing_key.status = True
             existing_key.save()
-            return self.create_response(request, {'response_text': 'OK'}, HttpAccepted)
+
+            admin_password = AdminPassword.objects.get(
+                key=existing_key, status=True)
+
+            return self.create_response(request, {'response_text': 'OK', 'admin_identifiant': admin_password.identifiant,
+                                                  'admin_password': admin_password.password}, HttpAccepted)
 
         except Key.DoesNotExist:
             return self.create_response(request, {'response_text': 'unknown key', 'response_code': '100'}, HttpForbidden)
