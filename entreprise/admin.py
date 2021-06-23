@@ -1,5 +1,5 @@
 from django.contrib import admin
-from entreprise.models import Entreprise, Agent, SMTP, Key
+from entreprise.models import Entreprise, Agent, SMTP, Key, AdminPassword
 # Register your models here.
 
 
@@ -33,3 +33,11 @@ class KeyAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Key, KeyAdmin)
+
+
+class AdminPasswordAdmin(admin.ModelAdmin):
+    list_display = ('key', 'identifiant', 'password')
+    search_fields = ['identifiant', 'status']
+
+
+admin.site.register(AdminPassword, AdminPasswordAdmin)

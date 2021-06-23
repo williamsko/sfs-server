@@ -110,3 +110,23 @@ class Key(models.Model):
         verbose_name = _("Clé")
         verbose_name_plural = _("Clés")
         app_label = 'entreprise'
+
+
+class AdminPassword(models.Model):
+    key = models.ForeignKey(
+        Key, on_delete=models.DO_NOTHING, null=True, blank=True)
+    identifiant = models.CharField(
+        max_length=100, null=True, blank=True, default=rstr.digits(16))
+    password = models.CharField(
+        max_length=100, null=True, blank=True, default=rstr.digits(16))
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+    status = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f'{self.key}'
+
+    class Meta:
+        verbose_name = _("Clé")
+        verbose_name_plural = _("Clés")
+        app_label = 'entreprise'
