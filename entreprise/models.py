@@ -1,5 +1,5 @@
 from django.db import models
-import rstr
+import uuid, rstr
 import slugify
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
@@ -92,10 +92,9 @@ class Key(models.Model):
 
     content = models.CharField(
         unique=True,
-        max_length=32,
+        max_length=36,
         null=False,
         blank=False,
-        default=rstr.digits(10),
     )
     entreprise = models.ForeignKey(
         Entreprise, on_delete=models.DO_NOTHING, null=True, blank=True)
@@ -105,6 +104,11 @@ class Key(models.Model):
 
     def __str__(self):
         return f'{self.content}'
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.content = uuid.uuid4()
+        return super(Key, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name = _("Clé")
