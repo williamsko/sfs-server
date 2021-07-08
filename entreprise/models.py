@@ -127,6 +127,6 @@ class AdminPassword(models.Model):
         return f'{self.key}'
 
     class Meta:
-        verbose_name = _("Clé")
-        verbose_name_plural = _("Clés")
+        verbose_name = _("Mot de passe admin")
+        verbose_name_plural = _("Mots de passe admin")
         app_label = 'entreprise'
