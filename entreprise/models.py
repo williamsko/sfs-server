@@ -93,8 +93,8 @@ class Key(models.Model):
     content = models.CharField(
         unique=True,
         max_length=36,
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
     )
     entreprise = models.ForeignKey(
         Entreprise, on_delete=models.DO_NOTHING, null=True, blank=True)
