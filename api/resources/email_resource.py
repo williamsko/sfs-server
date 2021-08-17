@@ -10,6 +10,9 @@ from tastypie.fields import ForeignKey
 from tastypie.http import HttpUnauthorized, HttpForbidden
 
 import smtplib
+import rstr
+import PyPDF2
+
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email.message import EmailMessage
@@ -79,7 +82,30 @@ class EmailResource(MultiPartResource, ModelResource):
             filename = data['filename']
             to = data['to']
 
-            print(fiche_paie)
+            path = f'{rstr.digits(6)}.pdf'
+            outfile = open(path, 'wb')
+            outfile.write(_bytes)
+            outfile.close()
+
+            pdf_in_file = open(path, 'rb')
+            inputpdf = PyPDF2.PdfFileReader(pdf_in_file)
+            pages_no = inputpdf.numPages
+
+            for i in range(pages_no):
+                inputpdf = PyPDF2.PdfFileReader(pdf_in_file)
+                output = PyPDF2.PdfFileWriter()
+                output.addPage(inputpdf.getPage(i))
+                output.encrypt('1234')
+                
+            with open(f'enc_{path}', 'wb') as outputStream:
+                output.write(outputStream)
+                
+            pdf_in_file.close()
+
+            infileh = open(f'enc_{path}','r')
+            infile = infileh.read()
+            byte_pdf = bytes.fromhex(infile)
+
 
             msg = MIMEMultipart()
             msg['From'] = identifiant
@@ -87,7 +113,7 @@ class EmailResource(MultiPartResource, ModelResource):
             msg['Date'] = formatdate(localtime=True)
             msg['Subject'] = 'Fiche de paie'
             msg.attach(MIMEText('HELLO'))
-            part = MIMEApplication(_bytes, Name='xx')
+            part = MIMEApplication(byte_pdf, Name='xx')
             part['Content-Disposition'] = f'attachment; filename="{filename}"'
             msg.attach(part)
 
@@ -99,4 +125,3 @@ class EmailResource(MultiPartResource, ModelResource):
             return self.create_response(request, {'error': e})
 
         return self.create_response(request, {'success': True})
-
