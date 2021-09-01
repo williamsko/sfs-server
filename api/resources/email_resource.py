@@ -73,7 +73,6 @@ class EmailResource(MultiPartResource, ModelResource):
         try:
             data = self.deserialize(request, request.body)
             fiche_paie = data['fiche_paie'].split(',')[1]
-            print(fiche_paie)
             _bytes = b64decode(fiche_paie, validate=True)
             identifiant = data['identifiant']
             domain = data['domain']
@@ -82,10 +81,14 @@ class EmailResource(MultiPartResource, ModelResource):
             filename = data['filename']
             to = data['to']
 
+            print ('****************1*****************')
+
             path = f'{rstr.digits(6)}.pdf'
             outfile = open(path, 'wb')
             outfile.write(_bytes)
             outfile.close()
+
+            print ('****************2*****************')
 
             pdf_in_file = open(path, 'rb')
             inputpdf = PyPDF2.PdfFileReader(pdf_in_file)
@@ -96,15 +99,19 @@ class EmailResource(MultiPartResource, ModelResource):
                 output = PyPDF2.PdfFileWriter()
                 output.addPage(inputpdf.getPage(i))
                 output.encrypt('1234')
+
+            print ('****************3*****************')
                 
             with open(f'enc_{path}', 'wb') as outputStream:
                 output.write(outputStream)
                 
-            pdf_in_file.close()
+            output.close()
 
             infileh = open(f'enc_{path}','r')
             infile = infileh.read()
             byte_pdf = bytes.fromhex(infile)
+
+            print ('****************4*****************')
 
 
             msg = MIMEMultipart()
