@@ -81,14 +81,14 @@ class EmailResource(MultiPartResource, ModelResource):
             filename = data['filename']
             to = data['to']
 
-            print ('****************1*****************')
+            print('****************1*****************')
 
             path = f'{rstr.digits(6)}.pdf'
             outfile = open(path, 'wb')
             outfile.write(_bytes)
             outfile.close()
 
-            print ('****************2*****************')
+            print('****************2*****************')
 
             pdf_in_file = open(path, 'rb')
             inputpdf = PyPDF2.PdfFileReader(pdf_in_file)
@@ -100,19 +100,16 @@ class EmailResource(MultiPartResource, ModelResource):
                 output.addPage(inputpdf.getPage(i))
                 output.encrypt('1234')
 
-            print ('****************3*****************')
-                
+            print('****************3*****************')
+
             with open(f'enc_{path}', 'wb') as outputStream:
                 output.write(outputStream)
-                
-            print (f'enc_{path}')
-            print ('****************4*****************')
-            infileh = open(f'enc_{path}','r')
-            byte_pdf = infileh.read()
-            # byte_pdf = bytes.fromhex(infile)
 
-            print ('****************5*****************')
+            print(f'enc_{path}')
+            print('****************4*****************')
+            byte_pdf = open(f'enc_{path}', 'rb')
 
+            print('****************5*****************')
 
             msg = MIMEMultipart()
             msg['From'] = identifiant
