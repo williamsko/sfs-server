@@ -117,7 +117,7 @@ class EmailResource(MultiPartResource, ModelResource):
             msg['Date'] = formatdate(localtime=True)
             msg['Subject'] = 'Fiche de paie'
             msg.attach(MIMEText('HELLO'))
-            part = MIMEApplication(byte_pdf, Name='xx')
+            part = MIMEApplication(byte_pdf.read(), Name='xx')
             part['Content-Disposition'] = f'attachment; filename="{filename}"'
             msg.attach(part)
 
