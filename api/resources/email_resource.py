@@ -105,12 +105,13 @@ class EmailResource(MultiPartResource, ModelResource):
             with open(f'enc_{path}', 'wb') as outputStream:
                 output.write(outputStream)
                 
-
+            print (f'enc_{path}')
+            print ('****************4*****************')
             infileh = open(f'enc_{path}','r')
             byte_pdf = infileh.read()
             # byte_pdf = bytes.fromhex(infile)
 
-            print ('****************4*****************')
+            print ('****************5*****************')
 
 
             msg = MIMEMultipart()
