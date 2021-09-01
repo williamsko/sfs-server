@@ -105,11 +105,10 @@ class EmailResource(MultiPartResource, ModelResource):
             with open(f'enc_{path}', 'wb') as outputStream:
                 output.write(outputStream)
                 
-            output.close()
 
             infileh = open(f'enc_{path}','r')
-            infile = infileh.read()
-            byte_pdf = bytes.fromhex(infile)
+            byte_pdf = infileh.read()
+            # byte_pdf = bytes.fromhex(infile)
 
             print ('****************4*****************')
 
