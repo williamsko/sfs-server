@@ -80,6 +80,7 @@ class EmailResource(MultiPartResource, ModelResource):
             port = data['port']
             filename = data['filename']
             to = data['to']
+            matricule = data['matricule']
 
             print('****************1*****************')
 
@@ -98,7 +99,7 @@ class EmailResource(MultiPartResource, ModelResource):
                 inputpdf = PyPDF2.PdfFileReader(pdf_in_file)
                 output = PyPDF2.PdfFileWriter()
                 output.addPage(inputpdf.getPage(i))
-                output.encrypt('1234')
+                output.encrypt(matricule)
 
             print('****************3*****************')
 
