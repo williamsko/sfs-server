@@ -99,9 +99,13 @@ class EmailResource(MultiPartResource, ModelResource):
             pages_no = inputpdf.numPages
 
             for i in range(pages_no):
+                print('****************ooo*****************')
                 inputpdf = PyPDF2.PdfFileReader(pdf_in_file)
+                print('****************ooo*****************')
                 output = PyPDF2.PdfFileWriter()
+                print('****************ooo*****************')
                 output.addPage(inputpdf.getPage(i))
+                print('****************ooo*****************')
                 output.encrypt(matricule)
 
             print('****************3*****************')
