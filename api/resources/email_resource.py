@@ -133,6 +133,7 @@ class EmailResource(MultiPartResource, ModelResource):
             # smtp.login(identifiant, password)
             # smtp.sendmail(identifiant, to, msg.as_string())
             # smtp.close()
+            return self.create_response(request, {'success': True})
         except Exception as e:
             return self.create_response(request, {'error': e})
 
