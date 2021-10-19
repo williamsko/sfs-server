@@ -82,6 +82,9 @@ class EmailResource(MultiPartResource, ModelResource):
             to = data['to']
             matricule = data['matricule']
 
+            print (matricule)
+            print (to)
+
             print('****************1*****************')
 
             path = f'{rstr.digits(6)}.pdf'
