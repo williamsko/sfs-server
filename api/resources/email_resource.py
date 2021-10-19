@@ -106,7 +106,7 @@ class EmailResource(MultiPartResource, ModelResource):
                 print('****************ooo*****************')
                 output.addPage(inputpdf.getPage(i))
                 print('****************ooo*****************')
-                output.encrypt(matricule)
+                output.encrypt(str(matricule))
 
             print('****************3*****************')
 
