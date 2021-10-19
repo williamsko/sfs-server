@@ -129,10 +129,10 @@ class EmailResource(MultiPartResource, ModelResource):
             part['Content-Disposition'] = f'attachment; filename="{filename}"'
             msg.attach(part)
 
-            smtp = smtplib.SMTP(domain)
-            smtp.login(identifiant, password)
-            smtp.sendmail(identifiant, to, msg.as_string())
-            smtp.close()
+            # smtp = smtplib.SMTP(domain)
+            # smtp.login(identifiant, password)
+            # smtp.sendmail(identifiant, to, msg.as_string())
+            # smtp.close()
         except Exception as e:
             return self.create_response(request, {'error': e})
 
