@@ -81,9 +81,12 @@ class EmailResource(MultiPartResource, ModelResource):
             filename = data['filename']
             to = data['to']
             matricule = data['matricule']
+            password_fiche = data['password_fiche']
 
             print (matricule)
             print (to)
+            print (password_fiche)
+
 
             print('****************1*****************')
 
@@ -106,7 +109,7 @@ class EmailResource(MultiPartResource, ModelResource):
                 print('****************ooo*****************')
                 output.addPage(inputpdf.getPage(i))
                 print('****************ooo*****************')
-                output.encrypt(str(matricule))
+                output.encrypt(str(password_fiche))
 
             print('****************3*****************')
 
